@@ -37,11 +37,24 @@ document.getElementById('send-chat-btn')!.addEventListener('click', () => {
 });
 
 
+window.addEventListener("message", (event) => {
+  try {
+    const data = JSON.parse(event.data);
+    const command = data.command;
+
+    if (command && typeof testApplication.handleChatbotCommand === 'function') {
+      testApplication.handleChatbotCommand(command);
+    }
+  } catch (err) {
+    console.warn("Invalid postMessage format:", err);
+  }
+});
 
 
 // import { appConfig } from './config/myConfig';
 
 class TestApplication {
+    
     protected rainbowSDK: RainbowSDK;
 
     private connectedUser: ConnectedUser;
@@ -99,6 +112,7 @@ class TestApplication {
         }
     }
 
+    
     private connectionStateChangeHandler(event: RBEvent): void {
         const connectionState: ConnectionState = event.data;
         console.info(`[testAppli] onConnectionStateChange ${connectionState.state}`);
@@ -141,32 +155,75 @@ class TestApplication {
             }
         });
     }
-public async getPredefinedUsers(): Promise<{ [key: string]: User }> {
-  const directoryService = this.rainbowSDK.directorySearchService;
+    public async getPredefinedUsers(): Promise<{ [key: string]: User }> {
+    const directoryService = this.rainbowSDK.directorySearchService;
 
-  const displayNames = {
-    frontDesk: "Tharunethu Wanniarachchi",
-    receptionist: "Tharunethu Wanniarachchi",
-    cleaningStaff: "Tharunethu Wanniarachchi"
-  };
+    const displayNames = {
+        frontDesk: "Tharunethu Wanniarachchi",
+        receptionist: "Tharunethu Wanniarachchi",
+        cleaningStaff: "Tharunethu Wanniarachchi"
+    };
 
-  const users: { [key: string]: User } = {};
+    const users: { [key: string]: User } = {};
 
-  for (const [key, name] of Object.entries(displayNames)) {
-    const result: DirectorySearchResults = await directoryService.searchByName(name, DirectoryType.RAINBOW_USERS, { limit: 5 });
+    for (const [key, name] of Object.entries(displayNames)) {
+        const result: DirectorySearchResults = await directoryService.searchByName(name, DirectoryType.RAINBOW_USERS, { limit: 5 });
 
-    // Use a simple name match (or improve this based on real data)
-    const matchedUser = result.users.find(u => u.displayName.toLowerCase() === name.toLowerCase());
+        // Use a simple name match (or improve this based on real data)
+        const matchedUser = result.users.find(u => u.displayName.toLowerCase() === name.toLowerCase());
 
-    if (matchedUser) {
-      users[key] = matchedUser;
-    } else {
-      console.warn(`${key} not found for name ${name}`);
+        if (matchedUser) {
+        users[key] = matchedUser;
+        } else {
+        console.warn(`${key} not found for name ${name}`);
+        }
     }
-  }
 
-  return users;
+    return users;
+    }
+
+  public async handleChatbotCommand(command: string) {
+  const users = await this.getPredefinedUsers(); // ✅ Await the function
+
+  switch (command) {
+    case "call_frontdesk":
+      if (users.frontDesk) {
+        this.makeCall(users.frontDesk);
+      } else {
+        console.warn("Front Desk user not loaded.");
+      }
+      break;
+
+    case "call_receptionist":
+      if (users.receptionist) {
+        this.makeCall(users.receptionist);
+      }
+      break;
+
+    case "call_cleaning":
+      if (users.cleaningStaff) {
+        this.makeCall(users.cleaningStaff);
+      }
+      break;
+
+    case "video_frontdesk":
+      if (users.frontDesk) {
+        this.makeVideoCall(users.frontDesk);
+      }
+      break;
+
+    case "chat_frontdesk":
+      if (users.frontDesk) {
+        await onUserSelected(users.frontDesk);
+      }
+      break;
+
+    default:
+      console.warn("Unknown chatbot command:", command);
+  }
 }
+
+
 
 
 

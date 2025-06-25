@@ -8,7 +8,7 @@ const config = [
         output: {
             file: './dist/index.js',
             format: 'esm',
-            sourcemap: 'true'
+            sourcemap: 'true',
         },
         plugins: [
             nodeResolve({
