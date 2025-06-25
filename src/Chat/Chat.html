@@ -1,0 +1,26 @@
+<div id="chat-section" class="chat-section">
+  <h3>Chat</h3>
+  <div id="chat-messages" class="chat-messages"></div>
+
+  <input type="text" id="chat-input" placeholder="Type a message..." />
+  <button id="send-chat-btn">Send</button>
+
+  <input type="file" id="chat-file-input" />
+  <button id="send-file-btn">Send File</button>
+</div>
+
+<script type="module">
+  import { ChatHandler } from './chat.js';
+
+  const chat = new ChatHandler(window.app.rainbowSDK); // assumes global app with initialized SDK
+
+  document.getElementById('send-chat-btn').onclick = () => {
+    const msg = document.getElementById('chat-input').value;
+    chat.sendMessage(msg);
+  };
+
+  document.getElementById('send-file-btn').onclick = () => {
+    const file = document.getElementById('chat-file-input').files[0];
+    if (file) chat.sendFile(file);
+  };
+</script>

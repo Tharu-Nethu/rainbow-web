@@ -1,0 +1,107 @@
+<html>
+    <head>
+        <!-- 🤔 Note: in the next line .js extension is not a typo  -->
+        <script type="module" src="./index.js"></script>
+        <link rel="stylesheet" href="./style.css">
+    </head>
+    <body>
+        <div id="loading-spinner" class="loading-spinner" style="display: none;"></div>
+        <div id="loginContainer" class="login-container" style="display: none;">
+            <h2>Login</h2>
+            <form id="loginForm">
+              <input type="text" id="username" placeholder="Username" required />
+              <input type="password" id="password" placeholder="Password" required />
+              <p id="error-message" class="error-message"></p>
+              <button type="submit">Login</button>
+            </form>
+        </div>
+
+        <div id="mainPage" class="main-page" style="display: none;">
+            <span id="profileToggle" style="cursor: pointer;">Log Out</span>
+
+                <div id="profileContainer" class="profile-container" style="display: none;">
+                    <img id="avatar" src="" alt="Avatar" class="avatar" />
+                    <h2>WELCOME</h2>
+                    <p id="company">Company</p>
+                    <button id="logout-btn">Logout</button>
+                </div>
+
+
+           <!--  <div class="staff-quick-access">
+                <h3>Quick Access</h3>
+                <div class="staff-list">
+                    <div class="staff-card">
+                        <p><strong>Front Desk</strong></p>
+                        <div class="btn-group">
+                        <button onclick="startChat('frontdesk@example.com')">💬</button>
+                        <button onclick="makeCall('frontdesk@example.com')">📞</button>
+                        <button onclick="makeVideoCall('frontdesk@example.com')">📹</button>
+                        </div>
+                    </div>
+
+                    <div class="staff-card">
+                        <p><strong>Receptionist</strong></p>
+                        <div class="btn-group">
+                        <button onclick="startChat('receptionist@example.com')">💬</button>
+                        <button onclick="makeCall('receptionist@example.com')">📞</button>
+                        <button onclick="makeVideoCall('receptionist@example.com')">📹</button>
+                        </div>
+                    </div>
+
+                    <div class="staff-card">
+                        <p><strong>Cleaning Staff</strong></p>
+                        <div class="btn-group">
+                        <button onclick="startChat('cleaningstaff@example.com')">💬</button>
+                        <button onclick="startAudioCall('cleaningstaff@example.com')">📞</button>
+                        <button onclick="startVideoCall('cleaningstaff@example.com')">📹</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div> -->
+
+                <h2 class="staff-heading">Contact Our Staff</h2>
+            <div id="staff-cards-container" class="staff-cards-container">
+
+            </div>
+             <div id="call-cards-container">
+                <!-- Call Cards will be dynamically added here -->
+            </div>
+
+            <div id="chat-section" class="chat-container" style="display: none;">
+                <h3>Chat with <span id="chat-username"></span></h3>
+                <div id="chat-messages" class="chat-messages"></div>
+                <input type="text" id="chat-input" placeholder="Type a message..." />
+                <button id="send-chat-btn">Send</button> 
+            </div>
+           <div id="video-container" style="display:none;">
+                <video id="local-video" autoplay muted playsinline></video>
+                <video id="remote-video" autoplay playsinline></video>
+                <div class="video-buttons">
+                    <button id="toggle-camera">🎥</button>
+                    <button id="start-share">🖥️</button>
+                    <button id="stop-share">✋</button>
+                </div>
+            </div>
+
+
+ 
+           
+            <div class="search-container">
+                <input type="text" id="call-query" placeholder="Call number" />
+                <button id="call-number-btn">Call</button>
+            </div>
+
+            <div class="search-container">
+                <input type="text" id="search-query" placeholder="Search for users..." />
+                <button id="search-btn">Search</button>
+            </div>
+
+            <div id="search-results" class="search-results">
+                <!-- Dynamic search result cards will go here -->
+            </div>
+
+           
+        </div>
+    </body>
+</html>
