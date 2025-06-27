@@ -14,10 +14,17 @@ import { CallServiceRB } from 'rainbow-web-sdk/lib/services/call/call.service';
 let chatHandler: ChatHandler;
 
 window.addEventListener("message", (event) => {
-  const messageEvent = event as MessageEvent;
-  console.log("🌐 Web received [window]:", messageEvent.data);
-  handleIncomingCommand(messageEvent.data);
+  console.log("🌐 Web received from RN:", event.data);
+  try {
+    const parsed = JSON.parse(event.data);
+    if (parsed.command) {
+      testApplication.handleChatbotCommand(parsed.command);
+    }
+  } catch (e) {
+    console.warn("Invalid command received:", e);
+  }
 });
+
 
 document.addEventListener("message", (event) => {
   const messageEvent = event as MessageEvent;
