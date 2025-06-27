@@ -13,7 +13,10 @@ import { CallServiceRB } from 'rainbow-web-sdk/lib/services/call/call.service';
 
 let chatHandler: ChatHandler;
 
+
+
 window.addEventListener("message", (event) => {
+    console.log("🌐 Web received:", event.data);
   try {
     let data;
 
