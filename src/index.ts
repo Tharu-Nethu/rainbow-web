@@ -259,7 +259,7 @@ class TestApplication {
     }
 
 public async handleChatbotCommand(command: string) {
-  const users = this.predefinedUsers;
+  const users = this.predefinedUsers; // ✅ Use saved version
 
   switch (command) {
     case "call_frontdesk":
@@ -304,6 +304,7 @@ public async handleChatbotCommand(command: string) {
 
 
 
+
     private showMainPage() {
 
         
@@ -340,6 +341,7 @@ public async handleChatbotCommand(command: string) {
 
                         (async () => {
             const users = await this.getPredefinedUsers();
+            testApplication.predefinedUsers = users; 
 
             if (users.frontDesk) addStaffButton("Front Desk", users.frontDesk);
             if (users.receptionist) addStaffButton("Receptionist", users.receptionist);
