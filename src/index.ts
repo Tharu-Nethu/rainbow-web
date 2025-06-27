@@ -13,9 +13,34 @@ import { CallServiceRB } from 'rainbow-web-sdk/lib/services/call/call.service';
 
 let chatHandler: ChatHandler;
 
-
-
 window.addEventListener("message", (event) => {
+  const messageEvent = event as MessageEvent;
+  console.log("🌐 Web received [window]:", messageEvent.data);
+  handleIncomingCommand(messageEvent.data);
+});
+
+document.addEventListener("message", (event) => {
+  const messageEvent = event as MessageEvent;
+  console.log("🌐 Web received [document]:", messageEvent.data);
+  handleIncomingCommand(messageEvent.data);
+});
+
+
+function handleIncomingCommand(data) {
+  try {
+    const parsed = JSON.parse(data);
+    const command = parsed.command;
+
+    if (command && typeof testApplication.handleChatbotCommand === 'function') {
+      testApplication.handleChatbotCommand(command);
+    }
+  } catch (e) {
+    console.warn("Invalid message:", e);
+  }
+}
+
+
+/* window.addEventListener("message", (event) => {
     console.log("🌐 Web received:", event.data);
   try {
     let data;
@@ -35,7 +60,7 @@ window.addEventListener("message", (event) => {
   } catch (err) {
     console.warn("Invalid postMessage format:", err);
   }
-});
+}); */
 
 
 async function onUserSelected(user: any) {
