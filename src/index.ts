@@ -13,6 +13,18 @@ import { CallServiceRB } from 'rainbow-web-sdk/lib/services/call/call.service';
 
 let chatHandler: ChatHandler;
 
+window.addEventListener("message", (event) => {
+  try {
+    const data = JSON.parse(event.data);
+    if (data.command && typeof testApplication.handleChatbotCommand === 'function') {
+      testApplication.handleChatbotCommand(data.command);
+    }
+  } catch (err) {
+    console.warn("Invalid message:", err);
+  }
+});
+
+
 async function onUserSelected(user: any) {
   if (!chatHandler) {
     chatHandler = new ChatHandler((window as any).testApplication.rainbowSDK);
@@ -37,18 +49,7 @@ document.getElementById('send-chat-btn')!.addEventListener('click', () => {
 });
 
 
-window.addEventListener("message", (event) => {
-  try {
-    const data = JSON.parse(event.data);
-    const command = data.command;
 
-    if (command && typeof testApplication.handleChatbotCommand === 'function') {
-      testApplication.handleChatbotCommand(command);
-    }
-  } catch (err) {
-    console.warn("Invalid postMessage format:", err);
-  }
-});
 
 
 // import { appConfig } from './config/myConfig';
