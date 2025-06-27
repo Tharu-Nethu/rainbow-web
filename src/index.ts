@@ -13,17 +13,43 @@ import { CallServiceRB } from 'rainbow-web-sdk/lib/services/call/call.service';
 
 let chatHandler: ChatHandler;
 
+let isAppReady = false;
+let queuedCommand: string | null = null;
+
+// Called when your app is fully ready and testApplication is initialized
+function onAppReady() {
+  isAppReady = true;
+  console.log("✅ App is ready");
+
+  // Execute the queued command
+  if (queuedCommand) {
+    console.log("🚀 Executing queued command:", queuedCommand);
+    testApplication.handleChatbotCommand(queuedCommand);
+    queuedCommand = null;
+  }
+}
+
+
 window.addEventListener("message", (event) => {
-  console.log("🌐 Web received from RN:", event.data);
   try {
-    const parsed = JSON.parse(event.data);
-    if (parsed.command) {
-      testApplication.handleChatbotCommand(parsed.command);
+    const data = JSON.parse(event.data);
+    const command = data.command;
+
+    if (command) {
+      console.log("🌐 Web received command:", command);
+
+      if (isAppReady) {
+        testApplication.handleChatbotCommand(command);
+      } else {
+        console.warn("⏳ App not ready. Queuing command.");
+        queuedCommand = command;
+      }
     }
-  } catch (e) {
-    console.warn("Invalid command received:", e);
+  } catch (err) {
+    console.warn("Invalid message format:", err);
   }
 });
+
 
 
 document.addEventListener("message", (event) => {
@@ -318,6 +344,7 @@ public async handleChatbotCommand(command: string) {
             if (users.frontDesk) addStaffButton("Front Desk", users.frontDesk);
             if (users.receptionist) addStaffButton("Receptionist", users.receptionist);
             if (users.cleaningStaff) addStaffButton("Cleaning Staff", users.cleaningStaff);
+            onAppReady();
             })();
 
         function addStaffButton(name: string, user: User) {
