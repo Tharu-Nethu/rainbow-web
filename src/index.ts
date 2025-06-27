@@ -68,6 +68,7 @@ class TestApplication {
     //to beo unsubscribed on log-out to avoid memory leak
     private conversationCallSubscription;
 
+
     constructor() {
     }
 
@@ -77,7 +78,7 @@ class TestApplication {
             return;
         }
 
-        this.rainbowSDK = RainbowSDK.create({
+                this.rainbowSDK = RainbowSDK.create({
             appConfig: {
                 server: appConfig.server,
                 applicationId: appConfig.applicationId,
@@ -91,7 +92,6 @@ class TestApplication {
         this.rainbowSDK.connectionService.subscribe((event: RBEvent) =>
             this.connectionStateChangeHandler(event), ConnectionServiceEvents.RAINBOW_ON_CONNECTION_STATE_CHANGE);
 
-
         // Show the loading spinner
         document.getElementById('loading-spinner').style.display = 'block';
 
@@ -101,6 +101,8 @@ class TestApplication {
         document.getElementById('loading-spinner').style.display = 'none';
 
         this.managePage();
+        this.predefinedUsers = await this.getPredefinedUsers();
+
     }
 
     private managePage() {
@@ -184,9 +186,9 @@ class TestApplication {
 
     return users;
     }
-    
-public handleChatbotCommand(command: string) {
-  const users = this.predefinedUsers; // ✅ use stored
+
+public async handleChatbotCommand(command: string) {
+  const users = this.predefinedUsers;
 
   switch (command) {
     case "call_frontdesk":
@@ -217,7 +219,7 @@ public handleChatbotCommand(command: string) {
 
     case "chat_frontdesk":
       if (users.frontDesk) {
-        onUserSelected(users.frontDesk);
+        await onUserSelected(users.frontDesk);
       }
       break;
 
