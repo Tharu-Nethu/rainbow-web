@@ -15,12 +15,22 @@ let chatHandler: ChatHandler;
 
 window.addEventListener("message", (event) => {
   try {
-    const data = JSON.parse(event.data);
-    if (data.command && typeof testApplication.handleChatbotCommand === 'function') {
-      testApplication.handleChatbotCommand(data.command);
+    let data;
+
+    // From React Native WebView (event.data is a string)
+    if (typeof event.data === "string") {
+      data = JSON.parse(event.data);
+    } else {
+      data = event.data;
+    }
+
+    const command = data.command;
+
+    if (command && typeof testApplication.handleChatbotCommand === 'function') {
+      testApplication.handleChatbotCommand(command);
     }
   } catch (err) {
-    console.warn("Invalid message:", err);
+    console.warn("Invalid postMessage format:", err);
   }
 });
 
