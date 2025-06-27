@@ -59,6 +59,8 @@ class TestApplication {
     protected rainbowSDK: RainbowSDK;
 
     private connectedUser: ConnectedUser;
+    public predefinedUsers: { [key: string]: User } = {};
+
 
     //will help to manage the list of calls
     private calls: Record<string, any> = {};
@@ -182,9 +184,9 @@ class TestApplication {
 
     return users;
     }
-
-  public async handleChatbotCommand(command: string) {
-  const users = await this.getPredefinedUsers(); // ✅ Await the function
+    
+public handleChatbotCommand(command: string) {
+  const users = this.predefinedUsers; // ✅ use stored
 
   switch (command) {
     case "call_frontdesk":
@@ -215,7 +217,7 @@ class TestApplication {
 
     case "chat_frontdesk":
       if (users.frontDesk) {
-        await onUserSelected(users.frontDesk);
+        onUserSelected(users.frontDesk);
       }
       break;
 
@@ -223,6 +225,7 @@ class TestApplication {
       console.warn("Unknown chatbot command:", command);
   }
 }
+
 
 
 
@@ -260,6 +263,7 @@ class TestApplication {
         avatarElement.src = this.connectedUser.avatar?.src;
 
         this.manageCalls();
+        
 
                         (async () => {
             const users = await this.getPredefinedUsers();
