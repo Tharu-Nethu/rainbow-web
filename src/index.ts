@@ -14,7 +14,7 @@ import { CallServiceRB } from 'rainbow-web-sdk/lib/services/call/call.service';
 let chatHandler: ChatHandler;
 
 let isAppReady = false;
-let queuedCommand: string | null = null;
+let queuedCommand = null;
 
 // Called when your app is fully ready and testApplication is initialized
 function onAppReady() {
@@ -22,13 +22,35 @@ function onAppReady() {
   console.log("✅ App is ready");
 
   // Execute the queued command
-  if (queuedCommand) {
+ /*  if (queuedCommand) {
     console.log("🚀 Executing queued command:", queuedCommand);
     testApplication.handleChatbotCommand(queuedCommand);
     queuedCommand = null;
-  }
+
+  } */
+  tryExecuteQueuedCommand();
 }
 
+const checkInterval = setInterval(() => {
+  console.log("⏰ Checking app readiness...");
+  if (isAppReady && queuedCommand) {
+    console.log("🚀 Executing delayed queued command:", queuedCommand);
+    tryExecuteQueuedCommand();
+    clearInterval(checkInterval); // Stop checking after execution
+  }
+}, 10000); // 10 seconds
+
+function tryExecuteQueuedCommand() {
+  if (isAppReady && queuedCommand) {
+    try {
+      testApplication.handleChatbotCommand(queuedCommand);
+      console.log("✅ Queued command executed:", queuedCommand);
+      queuedCommand = null;
+    } catch (error) {
+      console.error("❌ Failed to execute queued command:", error);
+    }
+  }
+}
 
 window.addEventListener("message", (event) => {
   try {
