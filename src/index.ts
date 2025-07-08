@@ -199,12 +199,12 @@ class TestApplication {
             this.connectionStateChangeHandler(event), ConnectionServiceEvents.RAINBOW_ON_CONNECTION_STATE_CHANGE);
 
         // Show the loading spinner
-        document.getElementById('loading-spinner').style.display = 'block';
+        document.getElementById('calling-status').style.display = 'block';
 
         this.connectedUser = await this.rainbowSDK.start();
 
         //hide loading spinner
-        document.getElementById('loading-spinner').style.display = 'none';
+        document.getElementById('calling-status').style.display = 'none';
 
         this.managePage();
         this.predefinedUsers = await this.getPredefinedUsers();
@@ -248,7 +248,7 @@ class TestApplication {
             } else {
                 // Show the loading spinner
                 document.getElementById('loginContainer').style.display = 'none';
-                document.getElementById('loading-spinner').style.display = 'block';
+                document.getElementById('calling-status').style.display = 'block';
                 try { this.connectedUser = await this.rainbowSDK.connectionService.logon(username, password, true); }
                 catch (error: any) {
                     document.getElementById('loginContainer').style.display = 'block';
@@ -260,7 +260,7 @@ class TestApplication {
                 errorMessage.textContent = '';
 
                 //hide loading spinner
-                document.getElementById('loading-spinner').style.display = 'none';
+                document.getElementById('calling-status').style.display = 'none';
 
                 this.showMainPage();
             }
