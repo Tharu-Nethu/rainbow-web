@@ -71,6 +71,19 @@ window.addEventListener("message", (event) => {
     console.warn("Invalid message format:", err);
   }
 });
+declare global {
+  interface Window {
+    ReactNativeWebView?: {
+      postMessage: (message: string) => void;
+    };
+  }
+}
+
+window.onload = () => {
+  console.log("🚀 Web App signaling React Native...");
+  window.ReactNativeWebView?.postMessage("__WEB_READY__");
+};
+
 
 
 
