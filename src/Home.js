@@ -21,6 +21,11 @@ const Home = () => {
     TestApplication.getInstance().loadRoster();
   }, []);
 
+  useEffect(() => {
+  window.ReactNativeWebView?.postMessage("__WEB_READY__");
+}, []);
+
+
   const renderTab = () => {
     switch (selectedTab) {
       case 1:
